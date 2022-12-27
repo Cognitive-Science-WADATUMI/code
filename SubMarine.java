@@ -84,11 +84,16 @@ class SubMarine{
   }
 
   public void response(int x. int y){
-    judge(x, y);  //行動入力
-    //周辺マスの値変更
+    String result = judge(x, y);  //行動入力
+    //周辺マスの値の変更
+    
   }
-  public void judge(int x, int y){
-    //判定プログラム
+  public String judge(int x, int y){
+    //判定プログラム(命中か波高しかはずれ)
+    String result;
+    
+    
+    return result;
   }
 
   public int transCtoI(char ch){
