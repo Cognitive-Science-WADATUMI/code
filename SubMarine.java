@@ -84,15 +84,22 @@ class SubMarine{
   }
 
   public void response(int x. int y){
-    String result = judge(x, y);  //行動入力
+    String result = judge(x, y);
     //周辺マスの値の変更
     
   }
   public String judge(int x, int y){
-    //判定プログラム(命中か波高しかはずれ)
     String result;
-    
-    
+    if( x = ex && y == ey){
+      result = "命中"
+      System.out.println(result);
+    }else if( (ex = x && ey == y-1) || (ex == x && ey == y+1) || (ex == x+1 && ey == y) || (ex == x+1 && ey == y-1) || (ex == x+1 && ey == y+1) || (ex == x-1 && ey == y) || (ex == x-1 && ey == y-1) || (ex == x-1 && ey == y+1)){
+      result = "波高し"
+      System.out.println(result);
+    }else{
+      result = "はずれ"
+      System.out.print(result);
+    }
     return result;
   }
 
