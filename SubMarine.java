@@ -1,18 +1,18 @@
 import java.util.Scanner;
 
 class SubMarine{
-  static double[][] us = new int[7][7];//0 or 1
-  static double[][] searchUs = new double[7][7];
-  static double[][] enemy = new double[7][7];
-  static int ourNum = 4;
-  static int enemyLife = 12
-  static int enemyNum = 4;
-  static String enemyAction;
+  static double[][] sub = new int[7][7];//0 or 1 自陣管理
+  static double[][] ob = new double[7][7];//敵目線自陣
+  static double[][] enemy = new double[7][7];//索敵
+  static int ourNum = 4;//自陣残機
+  static int enemyLife = 12;//敵総HP
+  static int enemyNum = 4;//敵残機
+  static String enemyAction;//攻撃か移動かを受け取る文字列
 
-  public void makeBoard(){
-    fill(us); fill(enemy); fill(searchUs);
+  public void makeBoard(){//盤面初期化
+    fill(sub); fill(enemy); fill(searchUs);
   }
-  public void fill(double[][] d){
+  public void fill(double[][] d){//初期化の中身
     for(int i = 0; i < d.length(); i++){
       for(int j = 0; j < d[i].length(); j++){
         if(i == 0 || j == 0 || i == d.length()-1 || j == d[i].length()-1){
@@ -25,15 +25,17 @@ class SubMarine{
     }
   }
 
-
   public static void main(String[] args){
     Scanner sc = new Scanner();
     SMInf sub1 = new SMInf("sub1", 3, 1, 1);
     SMInf sub2 = new SMInf("sub2", 3, 2, 2);
     SMInf sub3 = new SMInf("sub3", 3, 3, 3);
     SMInf sub4 = new SMInf("sub4", 3, 4, 4);
+    
+    makeBoard();
 
-    //事前処理
+    //ここまで事前処理
+    
     Scanner sc = new Scanner(System.in);
 
     while(ourNum > 0 && enemyLife > 0){//loop
