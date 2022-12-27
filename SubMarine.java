@@ -46,7 +46,7 @@ class SMInf{
 
 
 class SubMarine{
-  static double[][] us = new int[7][7];//0or1
+  static double[][] us = new int[7][7];//0 or 1
   static double[][] searchUs = new double[7][7];
   static double[][] enemy = new double[7][7];
   static int ourNum = 4;
@@ -78,7 +78,7 @@ class SubMarine{
     SMInf sub3 = new SMInf("sub3", 3, 3, 3);
     SMInf sub4 = new SMInf("sub4", 3, 4, 4);
 
-    //zizenn syori
+    //事前処理
     Scanner sc = new Scanner(System.in);
 
     while(ourNum > 0 && enemyLife > 0){//loop
@@ -89,7 +89,7 @@ class SubMarine{
         put("We Win!!!\n");
         return;
       }
-      if(ourNum <= 0){//end2
+      if(ourNum <= 0){//end 2
         put("We lose.\n");
         return ;
       }
@@ -97,14 +97,14 @@ class SubMarine{
 
 
   }
-  public String weMove(int x, int y, String s){//zahyou to fune no namae
+  public String weMove(int x, int y, String s){//座標と艦の名前
 
   }
 
   public void enemyAction(){
 
     put("enemy's action: ")
-    string es = sc.nextString();
+    string es = sc.nextString();//敵行動(attack or move)を入力
     if(es = "move"){
       String eDirection = sc.nextString();
       int moveNum = sc.nextInt();
@@ -126,12 +126,12 @@ class SubMarine{
 
   }
 
-  public void response(int x. int y){//*****
-    judge(x, y);
-    //syuuhenn masu atai hennkou
+  public void response(int x. int y){
+    judge(x, y);  //行動入力
+    //周辺マスの値変更
   }
-  public void judge(int x, int y){//*****
-    //hanntei
+  public void judge(int x, int y){
+    //判定プログラム
   }
 
   public int transCtoI(char ch){
