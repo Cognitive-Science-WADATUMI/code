@@ -85,9 +85,30 @@ class SubMarine{
 
   public void response(int x. int y){
     String result = judge(x, y);
-    //周辺マスの値の変更
-    
+    if(result == "命中"){
+      enemy[y][x]=1;
+    }else if{result == "波高し"){
+      enemy[y-1][x] += 0.125;
+      enemy[y+1][x] += 0.125;
+      enemy[y][x+1] += 0.125;
+      enemy[y-1][x+1] += 0.125;
+      enemy[y+1][x+1] += 0.125;
+      enemy[y][x-1] += 0.125;
+      enemy[y-1][x-1] += 0.125;
+      enemy[y+1][x-1] += 0.125;
+    }else{
+      enemy[y][x] = 0;
+      enemy[y-1][x] = 0;
+      enemy[y+1][x] = 0;
+      enemy[y][x+1] = 0;
+      enemy[y-1][x+1] = 0;
+      enemy[y+1][x+1] = 0;
+      enemy[y][x-1] = 0;
+      enemy[y-1][x-1] = 0;
+      enemy[y+1][x-1] = 0;
+    } //周辺マスの値の変更
   }
+    
   public String judge(int x, int y){
     String result;
     if( x = ex && y == ey){
@@ -98,8 +119,8 @@ class SubMarine{
       System.out.println(result);
     }else{
       result = "はずれ"
-      System.out.print(result);
     }
+    System.out.print(result);
     return result;
   }
 
