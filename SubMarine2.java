@@ -433,9 +433,11 @@ class SubMarine2{
     if(MorA == 0){ weMove();}
   }
   public static void weAttack(){
-    int x, y;
-    x = 1;
-    y = 1;
+    int[] kougekisaki = new int[2];
+    kougekisaki = decideAttackPlace();
+    int x = 0, y = 0;
+    x = kougekisaki[0]; y = kougekisaki[1];
+
     char xc = ItoC(x);
     putStr("attack "); putChar(xc); putStr("-"); putNum(y); newline();
     putStr("sunk(0), hit(1), namitakasi(2), hazure(3): ");
