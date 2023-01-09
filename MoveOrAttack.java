@@ -1,8 +1,9 @@
 class MoveOrAttack{
   //attack
     //波高しかつHP3
+  if( && 
     //命中かつ次ターン以降攻撃の場合
-  if()
+  
 
   //move
     //波高しでHP2の場合
