@@ -2,9 +2,6 @@ import java.util.Scanner;
 
 class SubMarine2{
   static Scanner sc = new Scanner(System.in);
-  //static int[][] us = new int[7][7];//0or1
-  //static int[][] searchUs = new int[7][7];
-  //static int[][] enemy = new int[7][7];
   static double[][] us = new double[7][7];//0or1
   static double[][] searchUs = new double[7][7];
   static double[][] enemy = new double[7][7];
@@ -486,6 +483,90 @@ class SubMarine2{
   }
   public static void weMove(){
     int movenum = 0, movex = 0, movey = 0;
+  }
+    public static int[] decideAttackPlace(){
+    int[] a = new int[2];
+    double d = -0.5;
+    Random rnd = new Random();
+    int r;
+    r = (int)Math.round(rnd.nextDouble());
+
+    for(int i = 0; i < 8; i++){//sub1 hanntei
+      if(d < sub1attack[i][2]){
+        d = sub1attack[i][2];
+        a[0] = (int)sub1attack[i][0];
+        a[1] = (int)sub1attack[i][1];
+        System.out.println(a[0] + " " + a[1] + "   " + d);
+      }
+      else if(d == sub1attack[i][2]){
+        r = (int)Math.round(rnd.nextDouble());
+        if(r == 1){
+          d = sub1attack[i][2];
+          a[0] = (int)sub1attack[i][0];
+          a[1] = (int)sub1attack[i][1];
+          System.out.println(a[0] + " " + a[1] + "   " + d);
+
+        }
+      }
+    }
+    for(int i = 0; i < 8; i++){//sub2 hanntei
+      if(d < sub2attack[i][2]){
+        d = sub2attack[i][2];
+        a[0] = (int)sub2attack[i][0];
+        a[1] = (int)sub2attack[i][1];
+        System.out.println(a[0] + " " + a[1] + "   " + d);
+
+      }
+      else if(d == sub2attack[i][2]){
+        r = (int)Math.round(rnd.nextDouble());
+        if(r == 1){
+          d = sub2attack[i][2];
+          a[0] = (int)sub2attack[i][0];
+          a[1] = (int)sub2attack[i][1];
+          System.out.println(a[0] + " " + a[1] + "   " + d);
+        }
+      }
+    }
+    for(int i = 0; i < 8; i++){//sub3 hanntei
+      if(d < sub3attack[i][2]){
+        d = sub3attack[i][2];
+        a[0] = (int)sub3attack[i][0];
+        a[1] = (int)sub3attack[i][1];
+        System.out.println(a[0] + " " + a[1] + "   " + d);
+
+      }
+      else if(d == sub3attack[i][2]){
+        r = (int)Math.round(rnd.nextDouble());
+        if(r == 1){
+          d = sub3attack[i][2];
+          a[0] = (int)sub3attack[i][0];
+          a[1] = (int)sub3attack[i][1];
+          System.out.println(a[0] + " " + a[1] + "   " + d);
+
+        }
+      }
+    }
+    for(int i = 0; i < 8; i++){//sub4 hanntei
+      if(d < sub4attack[i][2]){
+        d = sub4attack[i][2];
+        a[0] = (int)sub4attack[i][0];
+        a[1] = (int)sub4attack[i][1];
+        System.out.println(a[0] + " " + a[1] + "   " + d);
+
+      }
+      else if(d == sub4attack[i][2]){
+        r = (int)Math.round(rnd.nextDouble());
+        if(r == 1){
+          d = sub4attack[i][2];
+          a[0] = (int)sub4attack[i][0];
+          a[1] = (int)sub4attack[i][1];
+          System.out.println(a[0] + " " + a[1] + "   " + d);
+
+        }
+      }
+    }
+
+    return a;
   }
   public static void changeMorA(){
     MorA--;
