@@ -4,8 +4,9 @@ class MoveOrAttack{
   if( result == 'namitakashi' && (putSub(sub1)==3 || putSub(sub2)==3 || putSub(sub3)==3 )){
     
   }
-     //命中かつ次ターン以降攻撃の場合
-  if( result == 'hit' && ){
+  
+  //命中かつ次ターン以降攻撃の場合(move→attack)
+  if( result == 'hit' && (putSub(sub1)==1 || putSub(sub2)==1 || putSub(sub3)==1 )){
     
   }
   
