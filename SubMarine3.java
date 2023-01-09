@@ -3,6 +3,7 @@ import java.util.Random;
 
 class SubMarine3{
   static Scanner sc = new Scanner(System.in);
+  static Random rnd = new Random();
   static double[][] us = new double[7][7];//0or1
   static double[][] searchUs = new double[7][7];
   static double[][] enemy = new double[7][7];
@@ -12,13 +13,23 @@ class SubMarine3{
   static int enemyNum = 4;
   static int enemyAction = 0;//0...move , 1...attack
   static int countTurn = 0;
-  static int nextRunAway = 0;//0 or 1
+
+  //static int nextRunAway = 0;//0 or 1
+
   static int sakkiAtatta = 0;
+  static int ugokux = 0;
+  static int ugokuy = 0;
+  static String ugokumuki;
+  static int ugokukyori = 0;
+
   static int sakkiAteta = 0;
   static int sakkiAtetaX = 0;
   static int sakkiAtetaY = 0;
+
   static int idousita = 0;
   static int sakkinoidoukyori = 0;
+  static int sakkinohougaku = 0;//1, 2, 3, 4
+
   static int MorA = 1;//0 move   1 attack
 
   static SMInf sub1;
@@ -93,6 +104,14 @@ class SubMarine3{
     fillMove(sub2move, sub2x, sub2y);
     fillMove(sub3move, sub3x, sub3y);
     fillMove(sub4move, sub4x, sub4y);
+
+    int hp1 = sub1.getHP(), hp2 = sub2.getHP(), hp3 = sub3.getHP(), hp4 = sub4.getHP();
+
+    if(hp1 < 1){fillMinus(sub1attack);}
+    if(hp2 < 1){fillMinus(sub2attack);}
+    if(hp3 < 1){fillMinus(sub3attack);}
+    if(hp4 < 1){fillMinus(sub4attack);}
+
 
   }
   public static void fillMove(double[][] d, int x, int y){
@@ -201,13 +220,20 @@ class SubMarine3{
     }
     return;
   }
+  public static void fillMinus(double[][] d){
+    for(int i = 0; i < 8; i++){
+      for(int j = 0; j < 3; j++){
+        d[i][j] = -1.0;
+      }
+    }
+  }
 
   public static void main(String[] args){
   //  Scanner sc = new Scanner(System.in);
-    sub1 = new SMInf("sub1", 3, 1, 1);
-    sub2 = new SMInf("sub2", 3, 2, 2);
-    sub3 = new SMInf("sub3", 3, 3, 3);
-    sub4 = new SMInf("sub4", 3, 4, 4);
+    sub1 = new SMInf("sub1", 3, 1, 2);
+    sub2 = new SMInf("sub2", 3, 3, 1);
+    sub3 = new SMInf("sub3", 3, 5, 3);
+    sub4 = new SMInf("sub4", 3, 2, 4);
     makeBoard();
 
 
@@ -217,7 +243,7 @@ class SubMarine3{
     setOurPosition(sub4);
 
     setAttackAndMove();
-    putDouble(enemy[3][3]); newline();
+  //  putDouble(enemy[3][3]); newline();
 
     int con;//continue or not no switch
 
@@ -293,18 +319,17 @@ class SubMarine3{
       idousita = 1;
       putStr("direction  east(1), west(2), south(3), north(4): ");
       int dir = sc.nextInt();
+      sakkinohougaku = dir;
       putStr("num 1 or 2: ");
       int dirnum = sc.nextInt();
+      sakkinoidoukyori = dirnum;
       if(dir == 1){//east
         for(int i = 0; i < 7; i++){
           for(int j = dirnum; j < 7; j++){
             if(enemy[i][j] != -1.0){
               enemy[i][j] += 0.05;
             }
-            putDouble(enemy[i][j]);
-            putStr("   ");
           }
-          putStr("\n");
         }
       }//east
       if(dir == 2){//west
@@ -313,10 +338,7 @@ class SubMarine3{
             if(enemy[i][j] != -1.0){
               enemy[i][j] += 0.05;
             }
-            putDouble(enemy[i][j]);
-            putStr("   ");
           }
-          putStr("\n");
         }
       }//west
       if(dir == 3){//south
@@ -325,10 +347,7 @@ class SubMarine3{
             if(enemy[i][j] != -1.0){
               enemy[i][j] += 0.05;
             }
-            putDouble(enemy[i][j]);
-            putStr("   ");
           }
-          putStr("\n");
         }
       }//south
       if(dir == 4){//north
@@ -337,10 +356,7 @@ class SubMarine3{
             if(enemy[i][j] != -1.0){
               enemy[i][j] += 0.05;
             }
-            putDouble(enemy[i][j]);
-            putStr("   ");
           }
-          putStr("\n");
         }
       }//north
       return;
@@ -359,8 +375,8 @@ class SubMarine3{
       }
 
       if(us[x][y] == 1.0){//hit
-        sakkiAtatta = 1;
         ourLife--;
+        searchUs[x][y] = 1.0;
         int sub1x = sub1.getX(), sub1y = sub1.getY();
         if(x == sub1x && y == sub1y){
           sub1.declimentHP();
@@ -374,6 +390,39 @@ class SubMarine3{
             return;
           }
           putStr("hit!\n");
+
+          if(sakkiAteta == 0){
+            sakkiAtatta = 1;
+            double d = 10.0;
+            int mx = 0, my = 0, direct = 0;
+            for(int i = 0; i < 8; i++){
+              if(sub1move[i][2] != -1){
+                if(d > sub1move[i][2]){
+                  d = sub1move[i][2];
+                  mx = (int)sub1move[i][0];
+                  my = (int)sub1move[i][1];
+                }
+                if(d == sub1move[i][2]){
+                  int r = (int)Math.round(rnd.nextDouble());
+                  if(r == 1){
+                    d = sub1move[i][2];
+                    mx = (int)sub1move[i][0];
+                    my = (int)sub1move[i][1];
+                  }
+                }
+              }
+            }
+            if(x < mx){ugokukyori = mx-x; ugokumuki = "east"; }
+            if(x > mx){ugokukyori = x-mx; ugokumuki = "west"; }
+            if(y < my){ugokukyori = my-y; ugokumuki = "south"; }
+            if(y > my){ugokukyori = y-my; ugokumuki = "north"; }
+            ugokux = mx; ugokuy = my;
+            sub1.setX(mx); sub1.setY(my);
+            direct = DtoN(ugokumuki);
+            fillSearchUs1(direct, ugokukyori, searchUs);
+
+          }
+
           return;
         }
         int sub2x = sub2.getX(), sub2y = sub2.getY();
@@ -389,6 +438,40 @@ class SubMarine3{
             return;
           }
           putStr("hit!\n");
+          if(sakkiAteta == 0){
+
+            sakkiAtatta = 1;
+            double d = 10.0;
+            int mx = 0, my = 0, direct = 0;
+            for(int i = 0; i < 8; i++){
+              if(sub2move[i][2] != -1){
+                if(d > sub2move[i][2]){
+                  d = sub2move[i][2];
+                  mx = (int)sub2move[i][0];
+                  my = (int)sub2move[i][1];
+                }
+                if(d == sub2move[i][2]){
+                  int r = (int)Math.round(rnd.nextDouble());
+                  if(r == 1){
+                    d = sub2move[i][2];
+                    mx = (int)sub2move[i][0];
+                    my = (int)sub2move[i][1];
+                  }
+                }
+              }
+            }
+            if(x < mx){ugokukyori = mx-x; ugokumuki = "east";}
+            if(x > mx){ugokukyori = x-mx; ugokumuki = "west";}
+            if(y < my){ugokukyori = my-y; ugokumuki = "south";}
+            if(y > my){ugokukyori = y-my; ugokumuki = "north";}
+            ugokux = mx; ugokuy = my;
+
+            sub2.setX(mx); sub2.setY(my);
+
+            direct = DtoN(ugokumuki);
+            fillSearchUs1(direct, ugokukyori, searchUs);
+          }
+
           return;
         }
         int sub3x = sub3.getX(), sub3y = sub3.getY();
@@ -404,6 +487,39 @@ class SubMarine3{
             return;
           }
           putStr("hit!\n");
+          if(sakkiAteta == 0){
+            sakkiAtatta = 1;
+            double d = 10.0;
+            int mx = 0, my = 0, direct = 0;
+            for(int i = 0; i < 8; i++){
+              if(sub3move[i][2] != -1){
+                if(d > sub3move[i][2]){
+                  d = sub3move[i][2];
+                  mx = (int)sub3move[i][0];
+                  my = (int)sub3move[i][1];
+                }
+                if(d == sub3move[i][2]){
+                  int r = (int)Math.round(rnd.nextDouble());
+                  if(r == 1){
+                    d = sub3move[i][2];
+                    mx = (int)sub3move[i][0];
+                    my = (int)sub3move[i][1];
+                  }
+                }
+              }
+            }
+            if(x < mx){ugokukyori = mx-x; ugokumuki = "east";}
+            if(x > mx){ugokukyori = x-mx; ugokumuki = "west";}
+            if(y < my){ugokukyori = my-y; ugokumuki = "south";}
+            if(y > my){ugokukyori = y-my; ugokumuki = "north";}
+            ugokux = mx; ugokuy = my;
+
+            sub3.setX(mx); sub3.setY(my);
+
+            direct = DtoN(ugokumuki);
+            fillSearchUs1(direct, ugokukyori, searchUs);
+          }
+
           return;
         }
         int sub4x = sub4.getX(), sub4y = sub4.getY();
@@ -419,6 +535,40 @@ class SubMarine3{
             return;
           }
           putStr("hit!\n");
+          if(sakkiAteta == 0){
+
+            sakkiAtatta = 1;
+            double d = 10.0;
+            int mx = 0, my = 0, direct = 0;
+            for(int i = 0; i < 8; i++){
+              if(sub4move[i][2] != -1){
+                if(d > sub4move[i][2]){
+                  d = sub4move[i][2];
+                  mx = (int)sub4move[i][0];
+                  my = (int)sub4move[i][1];
+                }
+                if(d == sub4move[i][2]){
+                  int r = (int)Math.round(rnd.nextDouble());
+                  if(r == 1){
+                    d = sub4move[i][2];
+                    mx = (int)sub4move[i][0];
+                    my = (int)sub4move[i][1];
+                  }
+                }
+              }
+            }
+            if(x < mx){ugokukyori = mx-x; ugokumuki = "east";}
+            if(x > mx){ugokukyori = x-mx; ugokumuki = "west";}
+            if(y < my){ugokukyori = my-y; ugokumuki = "south";}
+            if(y > my){ugokukyori = y-my; ugokumuki = "north";}
+            ugokux = mx; ugokuy = my;
+
+            sub4.setX(mx); sub4.setY(my);
+
+            direct = DtoN(ugokumuki);
+            fillSearchUs1(direct, ugokukyori, searchUs);
+          }
+
           return;
         }
       }
@@ -426,26 +576,57 @@ class SubMarine3{
         for(int j = y - 1; j < y + 2; j++){
           if(us[i][j] == 1.0){
             putStr("nami takasi!\n");
+
+            for(int k = x - 1; k < x + 2; k++){
+              for(int l = y - 1; l < y + 2; l++){
+                if(k == x && l == y){
+                  continue;
+                }
+                if(searchUs[k][l] != -1){
+                  searchUs[k][l] += 0.125;
+                }
+              }
+            }
             return;
           }
         }
       }
       putStr("hazure\n");//hazure
+      for(int i = x - 1; i < x + 2; i++){
+        for(int j = y - 1; j < y + 2; j++){
+          if(searchUs[i][j] != -1){
+            searchUs[i][j] = 0;
+          }
+        }
+      }
       return;
     }
+  }
+  public static int DtoN(String s){
+    if(s == "east"){return 1;}
+    if(s == "west"){return 2;}
+    if(s == "south"){return 3;}
+    if(s == "north"){return 4;}
+    return 0;
   }
 
   public static void ourTurn(){
     putStr("Our turn.\n");
-
+    judgeMorA();
     if(MorA == 1){ weAttack();}
     if(MorA == 0){ weMove();}
   }
   public static void weAttack(){
-    int[] kougekisaki = new int[2];
-    kougekisaki = decideAttackPlace();
     int x = 0, y = 0;
-    x = kougekisaki[0]; y = kougekisaki[1];
+    if(sakkiAteta == 1){
+      x = sakkiAtetaX;
+      y = sakkiAtetaY;
+    }
+    else{
+      int[] kougekisaki = new int[2];
+      kougekisaki = decideAttackPlace();
+      x = kougekisaki[0]; y = kougekisaki[1];
+    }
 
     putNum(x); putStr(" "); putNum(y); newline();
     char xc = ItoC(x);
@@ -470,10 +651,26 @@ class SubMarine3{
       return;
     }
     if(result == 2){//namitakasi
-      for(int i = x-1; i < x+2; i++){
-        for(int j = y-1; j < y+2; j++){
-          if(enemy[x][y] != 0 && enemy[x][y] != 1){
-            enemy[x][y] += 0.125;
+      if(sakkiAteta == 1){
+        if(sakkinohougaku == 1){//east
+          enemy[sakkiAtetaX][sakkiAtetaY + sakkinoidoukyori] = 1.0;
+        }
+        else if(sakkinohougaku == 2){//west
+          enemy[sakkiAtetaX][sakkiAtetaY - sakkinoidoukyori] = 1.0;
+        }
+        else if(sakkinohougaku == 3){//south
+          enemy[sakkiAtetaX + sakkinoidoukyori][sakkiAtetaY] = 1.0;
+        }
+        else if(sakkinohougaku == 4){//north
+          enemy[sakkiAtetaX - sakkinoidoukyori][sakkiAtetaY] = 1.0;
+        }
+      }
+      else{
+        for(int i = x-1; i < x+2; i++){
+          for(int j = y-1; j < y+2; j++){
+            if(enemy[x][y] != 0 && enemy[x][y] != 1){
+              enemy[x][y] += 0.125;
+            }
           }
         }
       }
@@ -482,29 +679,49 @@ class SubMarine3{
       return;
     }
     if(result == 3){//hazure
-      for(int i = x-1; i < x+2; i++){
-        for(int j = y-1; j < y+2; j++){
-          if(enemy[i][j] != -1.0){
-            enemy[i][j] = 0.0;
+      enemy[x][y] = 0;
+      if(sakkiAteta == 1){
+        if(sakkinohougaku == 1){//east
+          enemy[sakkiAtetaX][sakkiAtetaY + sakkinoidoukyori] = 1.0;
+        }
+        else if(sakkinohougaku == 2){//west
+          enemy[sakkiAtetaX][sakkiAtetaY - sakkinoidoukyori] = 1.0;
+        }
+        else if(sakkinohougaku == 3){//south
+          enemy[sakkiAtetaX + sakkinoidoukyori][sakkiAtetaY] = 1.0;
+        }
+        else if(sakkinohougaku == 4){//north
+          enemy[sakkiAtetaX - sakkinoidoukyori][sakkiAtetaY] = 1.0;
+        }
+      }
+      else{
+        for(int i = x-1; i < x+2; i++){
+          for(int j = y-1; j < y+2; j++){
+            if(enemy[i][j] != -1.0){
+              enemy[i][j] = 0.0;
+            }
           }
         }
       }
+
       sakkiAteta = 0;
       return;
     }
   }
   public static void weMove(){
-    int movenum = 0, movex = 0, movey = 0;
+    System.out.print("move " + ugokumuki + " for " + ugokukyori + "\n");
+    return;
   }
 
   public static int[] decideAttackPlace(){
     int[] a = new int[2];
+    a[0] = 1; a[1] = 1;
     double d = -0.5;
-    Random rnd = new Random();
     int r;
     r = (int)Math.round(rnd.nextDouble());
+    int hp1 = sub1.getHP(), hp2 = sub2.getHP(), hp3 = sub3.getHP(), hp4 = sub4.getHP();
 
-    for(int i = 0; i < 8; i++){//sub1 hanntei
+    if(hp1 > 0){for(int i = 0; i < 8; i++){//sub1 hanntei
       if(d < sub1attack[i][2]){
         d = sub1attack[i][2];
         a[0] = (int)sub1attack[i][0];
@@ -521,8 +738,8 @@ class SubMarine3{
 
         }
       }
-    }
-    for(int i = 0; i < 8; i++){//sub2 hanntei
+    }}
+    if(hp2 > 0){for(int i = 0; i < 8; i++){//sub2 hanntei
       if(d < sub2attack[i][2]){
         d = sub2attack[i][2];
         a[0] = (int)sub2attack[i][0];
@@ -539,8 +756,8 @@ class SubMarine3{
           System.out.println(a[0] + " " + a[1] + "   " + d);
         }
       }
-    }
-    for(int i = 0; i < 8; i++){//sub3 hanntei
+    }}
+    if(hp3 > 0){for(int i = 0; i < 8; i++){//sub3 hanntei
       if(d < sub3attack[i][2]){
         d = sub3attack[i][2];
         a[0] = (int)sub3attack[i][0];
@@ -558,8 +775,8 @@ class SubMarine3{
 
         }
       }
-    }
-    for(int i = 0; i < 8; i++){//sub4 hanntei
+    }}
+    if(hp4 > 0){for(int i = 0; i < 8; i++){//sub4 hanntei
       if(d < sub4attack[i][2]){
         d = sub4attack[i][2];
         a[0] = (int)sub4attack[i][0];
@@ -577,15 +794,64 @@ class SubMarine3{
 
         }
       }
-    }
+    }}
 
     return a;
   }
 
-  public static void changeMorA(){
-    MorA--;
-    MorA *= MorA;
-    putNum(MorA); newline();
+  public static void fillSearchUs1(int dir, int dirnum, double[][] enemy){
+    if(dir == 1){//east
+      for(int i = 0; i < 7; i++){
+        for(int j = dirnum; j < 7; j++){
+          if(enemy[i][j] != -1.0){
+            enemy[i][j] += 0.05;
+          }
+        }
+      }
+    }//east
+    if(dir == 2){//west
+      for(int i = 0; i < 7; i++){
+        for(int j = 0; j < 7 - dirnum - 1; j++){
+          if(enemy[i][j] != -1.0){
+            enemy[i][j] += 0.05;
+          }
+        }
+      }
+    }//west
+    if(dir == 3){//south
+      for(int i = dirnum; i < 7; i++){
+        for(int j = 0; j < 7; j++){
+          if(enemy[i][j] != -1.0){
+            enemy[i][j] += 0.05;
+          }
+        }
+      }
+    }//south
+    if(dir == 4){//north
+      for(int i = 0; i < 7 - dirnum - 1; i++){
+        for(int j = 0; j < 7; j++){
+          if(enemy[i][j] != -1.0){
+            enemy[i][j] += 0.05;
+          }
+        }
+      }
+    }//north
+  }
+
+  public static void judgeMorA(){
+    if(sakkiAteta == 1){ MorA = 1; return;}
+    if(sakkiAtatta == 1){
+      MorA = 0;
+      //nextRunAway = 1;
+      sakkiAtatta = 0;
+      return;
+    }
+    /*if(nextRunAway == 1){
+      MorA = 1;
+      nextRunAway = 0;
+      return;
+    }*/
+    else{MorA = 1; return;}
   }
 
   public static char ItoC(int n){
