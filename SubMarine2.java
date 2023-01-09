@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-class SubMarine{
+class SubMarine2{
   static Scanner sc = new Scanner(System.in);
   //static int[][] us = new int[7][7];//0or1
   //static int[][] searchUs = new int[7][7];
@@ -20,11 +20,22 @@ class SubMarine{
   static int sakkiAtetaX = 0;
   static int sakkiAtetaY = 0;
   static int idousita = 0;
+  static int sakkinoidoukyori = 0;
+  static int MorA = 1;//0 move   1 attack
 
   static SMInf sub1;
   static SMInf sub2;
   static SMInf sub3;
   static SMInf sub4;
+
+  static double[][] sub1attack = new double[8][3];
+  static double[][] sub1move = new double[8][3];
+  static double[][] sub2attack = new double[8][3];
+  static double[][] sub2move = new double[8][3];
+  static double[][] sub3attack = new double[8][3];
+  static double[][] sub3move = new double[8][3];
+  static double[][] sub4attack = new double[8][3];
+  static double[][] sub4move = new double[8][3];
 
   //System.out
   public static void putNum(int n){
@@ -32,6 +43,9 @@ class SubMarine{
   }
   public static void putDouble(double d){
     System.out.print(d);
+  }
+  public static void putChar(char c){
+    System.out.print(c);
   }
   public static void putStr(String s){
     System.out.print(s);
@@ -66,6 +80,124 @@ class SubMarine{
     us[x][y] = 1.0;
     return ;
   }
+  public static void setAttackAndMove(){
+    int sub1x = sub1.getX(), sub1y = sub1.getY(),
+        sub2x = sub2.getX(), sub2y = sub2.getY(),
+        sub3x = sub3.getX(), sub3y = sub3.getY(),
+        sub4x = sub4.getX(), sub4y = sub4.getY();
+
+    fillattack(sub1attack, sub1x, sub1y);
+    fillattack(sub2attack, sub2x, sub2y);
+    fillattack(sub3attack, sub3x, sub3y);
+    fillattack(sub4attack, sub4x, sub4y);
+
+    fillMove(sub1move, sub1x, sub1y);
+    fillMove(sub2move, sub2x, sub2y);
+    fillMove(sub3move, sub3x, sub3y);
+    fillMove(sub4move, sub4x, sub4y);
+
+  }
+  public static void fillMove(double[][] d, int x, int y){
+    for(int i = 0; i < 8; i++){
+      for(int j = 0; j < 3; j++){
+        if(j == 0){//x
+          if(i == 0){
+            if(x-2 < 0){
+              d[i][j] = -1;
+            }
+            else{
+              d[i][j] = x-2;
+            }
+          }
+          if(i == 1){
+            d[i][j] = x-1;
+          }
+          if(i == 2 || i == 3 || i == 6 || i == 7){
+            d[i][j] = x;
+          }
+          if(i == 4){
+            if(x+2 > 6){
+              d[i][j] = -1;
+            }
+            else{
+              d[i][j] = x+2;
+            }
+          }
+          if(i == 5){
+            d[i][j] = x+1;
+          }
+        }
+        if(j == 1){//y
+          if(i == 0 || i == 1 || i == 4 || i == 5){
+            d[i][j] = y;
+          }
+          if(i == 2){
+            if(y+2 > 6){
+              d[i][j] = -1;
+            }
+            else{
+              d[i][j] = y+2;
+            }
+          }
+          if(i == 3){
+            d[i][j] = y+1;
+          }
+          if(i == 6){
+            if(y-2 < 0){
+              d[i][j] = -1;
+            }
+            else{
+              d[i][j] = y-2;
+            }
+          }
+          if(i == 7){
+            d[i][j] = y-1;
+          }
+        }
+        if(j == 2){//searchUs
+          if((d[i][j-2] != -1) && (d[i][j-1] != -1)){
+            d[i][j] = searchUs[(int)d[i][j-2]][(int)d[i][j-1]];
+          }
+          else{
+            d[i][j] = -1;
+          }
+        }
+      }
+    }
+  }
+
+  public static void fillattack(double[][] d, int x, int y){
+    for(int i = 0; i < 8; i++){
+      for(int j = 0; j < 3; j++){
+        if(j == 0){
+          if(i == 0 || i == 3 || i == 5){
+            d[i][j] = x-1;
+          }
+          else if(i == 1 || i == 6){
+            d[i][j] = x;
+          }
+          else{
+            d[i][j] = x + 1;
+          }
+        }
+        if(j == 1){
+          if(i < 3){
+            d[i][j] = y-1;
+          }
+          else if(i < 5){
+            d[i][j] = y;
+          }
+          else{
+            d[i][j] = y+1;
+          }
+        }
+        if(j == 2){
+          d[i][j] = enemy[(int)d[i][j-2]][(int)d[i][j-1]];
+        }
+      }
+    }
+    return;
+  }
 
   public static void main(String[] args){
   //  Scanner sc = new Scanner(System.in);
@@ -81,16 +213,24 @@ class SubMarine{
     setOurPosition(sub3);
     setOurPosition(sub4);
 
+    setAttackAndMove();
+    putDouble(sub1attack[3][1]); newline();
+
+    int con;//continue or not no switch
+
     putStr("which goes first?  us = 0 , enemy = 1:  ");
     int first = sc.nextInt();
-    if(first == 0){
-      putStr("we go first.\n");
+    if(first == 0){//syote wareware
       ourTurn();
       countTurn++;
       showSituation();
+      putStr("continue? yes(1) or no(0): ");
+      con = sc.nextInt();
+      if(con == 0){
+        return;
+      }
     }
 
-    int con;//continue or not
     do{
       enemysTurn();
       countTurn++;
@@ -100,6 +240,8 @@ class SubMarine{
       if(con == 0){
         break;
       }
+
+      if(ourNum < 0 || enemyNum < 0){ break;}
 
       ourTurn();
       countTurn++;
@@ -111,6 +253,30 @@ class SubMarine{
       }
 
     }while(ourNum > 0 && enemyNum > 0);
+    gameResult();//kekka
+    return;//owari
+  }
+
+  public static void gameResult(){
+    putStr("******** game result ********\n");
+    if(ourNum > enemyNum){
+      putStr("we win!!!!\n");
+      return;
+    }
+    if(ourNum < enemyNum){
+      putStr("we lose...\n");
+      return;
+    }
+    if(ourLife > enemyLife){
+      putStr("we win!!!\n");
+      return;
+    }
+    if(ourLife < enemyLife){
+      putStr("we lose...\n");
+      return;
+    }
+    putStr("draw\n");
+    return;
   }
 
   public static void enemysTurn(){
@@ -264,11 +430,17 @@ class SubMarine{
   }
 
   public static void ourTurn(){
-    putStr("Our turn.\n"); newline();
+    putStr("Our turn.\n");
+
+    if(MorA == 1){ weAttack();}
+    if(MorA == 0){ weMove();}
+  }
+  public static void weAttack(){
     int x, y;
     x = 1;
     y = 1;
-    putStr("attack "); putNum(x); putStr("-"); putNum(y); newline();
+    char xc = ItoC(x);
+    putStr("attack "); putChar(xc); putStr("-"); putNum(y); newline();
     putStr("sunk(0), hit(1), namitakasi(2), hazure(3): ");
     int result = sc.nextInt();
     if(result == 0){//sunk
@@ -312,15 +484,33 @@ class SubMarine{
       return;
     }
   }
+  public static void weMove(){
+    int movenum = 0, movex = 0, movey = 0;
+  }
+  public static void changeMorA(){
+    MorA--;
+    MorA *= MorA;
+    putNum(MorA); newline();
+  }
+
+  public static char ItoC(int n){
+    char c = 'z';
+    if(n == 1){ c = 'a';}
+    else if(n == 2){ c = 'b';}
+    else if(n == 3){ c = 'c';}
+    else if(n == 4){ c = 'd';}
+    else if(n == 5){ c = 'e';}
+    return c;
+  }
 
   public static void showSituation(){
     newline();
     putStr("turn"); putNum(countTurn); newline();
     putSub(sub1); putSub(sub2); putSub(sub3); putSub(sub4);
-    //newline();
+    putNum(MorA); newline();
     putStr("ourNum: "); putNum(ourNum); putStr("  ourHP: "); putNum(ourLife); newline();
     putStr("enemyNum: "); putNum(enemyNum); putStr("  enemy'sHP: "); putNum(enemyLife); newline();
-    newline();
+    putStr("**********************************\n");
   }
 
 }
